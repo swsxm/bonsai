@@ -6,7 +6,7 @@ readme = "README.md"
 authors = [
     { name = "swsxm", email = "129607562+swsxm@users.noreply.github.com" }
 ]
-requires-python = ">=3.13"
+requires-python = "==3.13"
 dependencies = [
     "setuptools>=80.9.0",
 ]
