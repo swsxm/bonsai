@@ -2,15 +2,14 @@
 
 **A lightweight DataFrame implementation written in C.**
 
-![Python](https://img.shields.io/badge/python-3.13-blue)
+![Python](https://img.shields.io/badge/python-3.13%2B-blue)
 ![Build](https://img.shields.io/badge/build-native%20C-green)
 ![License](https://img.shields.io/badge/license-MIT-purple)
-
-**Status: Work in Progress**
 
 Bonsai is a project designed to understand how Python C-Extensions work. It implements a basic DataFrame structure using C to explore manual memory management and the Python C-API.
 
 > **Note:** This is a playground project created for learning and experimentation.
+            *WIP*
 
 ---
 
