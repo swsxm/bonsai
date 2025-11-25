@@ -1,6 +1,10 @@
 from setuptools import setup, Extension
 
-bonsai_module = Extension("bonsai._core", sources=[], include_dirs=["src"])
+bonsai_module = Extension(
+    "bonsai._core",
+    sources=["src/core/module.c", "src/core/dataframe.c"],
+    include_dirs=["src/core"],
+)
 
 setup(
     name="bonsai",
