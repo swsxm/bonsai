@@ -1,16 +1,15 @@
 from setuptools import setup, Extension
+import glob
 
+source_files = glob.glob("src/core/**/*.c", recursive=True)
+print(source_files)
 bonsai_module = Extension(
     "bonsai._core",
-    sources=["src/core/module.c", "src/core/dataframe.c"],
+    sources=source_files,
     include_dirs=["src/core"],
 )
 
 setup(
     name="bonsai",
-    version="0.1.0",
-    description="A toy DataFrame implementation in C",
-    package_dir={"": "src"},
-    packages=["bonsai"],
     ext_modules=[bonsai_module],
 )
