@@ -43,7 +43,7 @@ int DataFrame__init__(DataFrameObject* self, PyObject* args, PyObject* kwgs) {
   }
 
   switch (self->dtype) {
-    ALL_NUMERIC_TYPES(GEN_INIT_CASE)
+    ALL_TYPES(GEN_INIT_CASE)
 
     case DTYPE_STRING: {
       char** array = (char**)PyMem_Malloc(self->size * sizeof(char*));

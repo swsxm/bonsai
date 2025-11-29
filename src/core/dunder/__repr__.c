@@ -17,7 +17,7 @@ PyObject* DataFrame__repr__(DataFrameObject* self) {
   if (!temp_list) return NULL;
 
   switch (self->dtype) {
-    ALL_NUMERIC_TYPES(GEN_REPR_CASE)
+    ALL_TYPES(GEN_REPR_CASE)
 
     case DTYPE_STRING: {
       char** array = (char**)self->data;

@@ -2,15 +2,18 @@
 #define DATAFRAME_H
 
 #include <Python.h>
+#include <stdbool.h>
 
-#define ALL_NUMERIC_TYPES(X)                                   \
-  X(DTYPE_FLOAT, double, PyFloat_AsDouble, PyFloat_FromDouble) \
-  X(DTYPE_INT, long long, PyLong_AsLongLong, PyLong_FromLongLong)
-// Handle strings separately as they require an array of pointers.
+// Will be called as: X(ENUM, C_TYPE, PY_TO_C, C_TO_PY)
+#define ALL_TYPES(X)                                              \
+  X(DTYPE_FLOAT, double, PyFloat_AsDouble, PyFloat_FromDouble)    \
+  X(DTYPE_INT, long long, PyLong_AsLongLong, PyLong_FromLongLong) \
+  X(DTYPE_BOOL, char, PyObject_IsTrue, PyBool_FromLong)           \
+  // Handle strings separately as they require an array of pointers.
 
 typedef enum {
 #define GENERATE_ENUM(NAME, T, P2C, C2P) NAME,
-  ALL_NUMERIC_TYPES(GENERATE_ENUM)
+  ALL_TYPES(GENERATE_ENUM)
 #undef GENERATE_ENUM
 
       DTYPE_STRING
