@@ -2,7 +2,6 @@ from setuptools import setup, Extension
 import glob
 
 source_files = glob.glob("src/core/**/*.c", recursive=True)
-print(source_files)
 bonsai_module = Extension(
     "bonsai._core",
     sources=source_files,

@@ -1,6 +1,7 @@
 #include <Python.h>
+#include <string.h>
 
-#include "../dataframe.h"
+#include "../column.h"
 
 #define GEN_INIT_CASE(NAME, C_TYPE, PY_TO_C, C_TO_PY)                   \
   case NAME: {                                                          \
@@ -19,20 +20,23 @@
     break;                                                              \
   }
 
-int DataFrame__init__(DataFrameObject* self, PyObject* args, PyObject* kwgs) {
+int Column__init__(ColumnObject* self, PyObject* args, PyObject* kwgs) {
   PyObject* input_list;
-
-  if (!PyArg_ParseTuple(args, "O!", &PyList_Type, &input_list)) return -1;
-
+  PyObject* name;
+  if (!PyArg_ParseTuple(args, "OOO!", &name, &PyList_Type, &input_list)) {
+    return -1;
+  }
+  self->name = name;
   self->size = PyList_Size(input_list);
   if (self->size == 0) {
     self->data = NULL;
     return 0;
   }
-
   PyObject* first = PyList_GetItem(input_list, 0);
-  if (PyFloat_Check(first))
-    self->dtype = DTYPE_FLOAT;
+  if (PyFloat_Check(first)) self->dtype = DTYPE_FLOAT;
+  // Order: Bool Check before INT
+  else if (PyBool_Check(first))
+    self->dtype = DTYPE_BOOL;
   else if (PyLong_Check(first))
     self->dtype = DTYPE_INT;
   else if (PyUnicode_Check(first))
@@ -41,7 +45,6 @@ int DataFrame__init__(DataFrameObject* self, PyObject* args, PyObject* kwgs) {
     PyErr_SetString(PyExc_TypeError, "Unsupported type");
     return -1;
   }
-
   switch (self->dtype) {
     ALL_TYPES(GEN_INIT_CASE)
 
