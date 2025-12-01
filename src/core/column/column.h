@@ -1,16 +1,14 @@
 #ifndef COLUMN_H
 #define COLUMN_H
-#include <Python.h>
+#include "core.h"
 
-// Will be called as: X(ENUM, C_TYPE, PY_TO_C, C_TO_PY)
-// Handle strings separately as they require an array of pointers.
-#define ALL_TYPES(X)                                              \
-  X(DTYPE_FLOAT, double, PyFloat_AsDouble, PyFloat_FromDouble)    \
-  X(DTYPE_INT, long long, PyLong_AsLongLong, PyLong_FromLongLong) \
-  X(DTYPE_BOOL, char, PyObject_IsTrue, PyBool_FromLong)
+#define ALL_TYPES(X)                                                      \
+  X(DTYPE_FLOAT, double, PyFloat_AsDouble, PyFloat_FromDouble, "%.6g")    \
+  X(DTYPE_INT, long long, PyLong_AsLongLong, PyLong_FromLongLong, "%lld") \
+  X(DTYPE_BOOL, char, PyObject_IsTrue, PyBool_FromLong, "%d")
 
 typedef enum {
-#define GENERATE_ENUM(NAME, T, P2C, C2P) NAME,
+#define GENERATE_ENUM(NAME, T, P2C, C2P, FMT) NAME,
   ALL_TYPES(GENERATE_ENUM)
 #undef GENERATE_ENUM
       DTYPE_STRING

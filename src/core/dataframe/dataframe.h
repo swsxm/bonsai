@@ -10,5 +10,6 @@ typedef struct {
 
 void DataFrame__dealloc__(DataFrameObject* self);
 int DataFrame__init__(DataFrameObject* self, PyObject* args, PyObject* kwds);
+PyObject* DataFrame__repr__(DataFrameObject* self);
 
 #endif

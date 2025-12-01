@@ -1,9 +1,9 @@
 #include <Python.h>
 #include <string.h>
 
-#include "../column.h"
+#include "core.h"
 
-#define GEN_INIT_CASE(NAME, C_TYPE, PY_TO_C, C_TO_PY)                   \
+#define GEN_INIT_CASE(NAME, C_TYPE, PY_TO_C, C_TO_PY, FMT)              \
   case NAME: {                                                          \
     C_TYPE* array = (C_TYPE*)PyMem_Malloc(self->size * sizeof(C_TYPE)); \
     if (!array) return -1;                                              \
@@ -23,7 +23,7 @@
 int Column__init__(ColumnObject* self, PyObject* args, PyObject* kwgs) {
   PyObject* input_list;
   PyObject* name;
-  if (!PyArg_ParseTuple(args, "OOO!", &name, &PyList_Type, &input_list)) {
+  if (!PyArg_ParseTuple(args, "OO!", &name, &PyList_Type, &input_list)) {
     return -1;
   }
   self->name = name;

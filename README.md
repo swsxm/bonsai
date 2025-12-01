@@ -24,18 +24,7 @@ A native C-extension implementing a bare-metal DataFrame for Python. Bonsai mana
 ### Development Setup
 
 ```bash
-# 1. Clone the repository
-git clone git@github.com:swsxm/bonsai.git
-cd bonsai
-
-# 2. Initialize the environment
-uv sync
-
-# 3. Compile the C-Extension locally
-uv run python setup.py build_ext --inplace
-
-# 4. Install in editable mode
-uv pip install -e .
+make
 ```
 
 - - -

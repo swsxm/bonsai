@@ -1,6 +1,6 @@
 #include <Python.h>
 
-#include "../dataframe.h"
+#include "core.h"
 
 void DataFrame__dealloc__(DataFrameObject* self) {
   if (self->columns) {

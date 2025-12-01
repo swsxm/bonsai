@@ -1,7 +1,6 @@
 #include <Python.h>
 
-#include "../../column/column.h"
-#include "../dataframe.h"
+#include "core.h"
 
 int DataFrame__init__(DataFrameObject* self, PyObject* args, PyObject* kwgs) {
   PyObject* input_dict;
@@ -14,7 +13,7 @@ int DataFrame__init__(DataFrameObject* self, PyObject* args, PyObject* kwgs) {
 
   while (PyDict_Next(input_dict, &pos, &key, &value)) {
     PyObject* column =
-        PyObject_CallFunction((PyObject*)&ColumnType, "nOO", key, value);
+        PyObject_CallFunction((PyObject*)&ColumnType, "OO", key, value);
     if (column == NULL) {
       return -1;
     }

@@ -20,5 +20,6 @@ PyTypeObject DataFrameType = {
     .tp_flags = Py_TPFLAGS_DEFAULT,
     .tp_doc = "A basic C DataFrame.",
     .tp_new = PyType_GenericNew,
+    .tp_repr = (reprfunc)DataFrame__repr__,
     .tp_init = (initproc)DataFrame__init__,
     .tp_dealloc = (destructor)DataFrame__dealloc__};
