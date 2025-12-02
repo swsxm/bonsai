@@ -1,4 +1,4 @@
 import bonsai
 
-df = bonsai.DataFrame({"test": [1, 2, 3], "kaktus": [333333333333332342]})
-print(df)
+df = bonsai.DataFrame({"example_1": [1, 2, 3], "example_2": [4, 5, 6]})
+print(df.num_columns)
