@@ -22,8 +22,10 @@ typedef struct {
 } ColumnObject;
 
 extern PyTypeObject ColumnType;
+extern PyMemberDef Column_members[];
 
 void Column__dealloc__(ColumnObject* self);
 int Column__init__(ColumnObject* self, PyObject* args, PyObject* kwds);
+extern PyObject* ColumnGetItem(ColumnObject* self, int row_num);
 
 #endif

@@ -12,5 +12,9 @@ extern PyMemberDef DataFrame_members[];
 void DataFrame__dealloc__(DataFrameObject* self);
 int DataFrame__init__(DataFrameObject* self, PyObject* args, PyObject* kwds);
 PyObject* DataFrame__repr__(DataFrameObject* self);
+PyObject* DataFrameGetItem(DataFrameObject* self, PyObject* args,
+                           PyObject* kwds);
+PyObject* DataFrameGetDtype(DataFrameObject* self, PyObject* args,
+                            PyObject* kwds);
 
 #endif

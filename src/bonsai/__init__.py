@@ -1,3 +1,3 @@
-from ._core import DataFrame
+from bonsai.dataframe import DataFrame
 
 __all__ = ["DataFrame"]
