@@ -3,10 +3,9 @@ from ._core import DataFrame as _DataFrame
 
 class DataFrame(_DataFrame):
     def __repr__(self) -> str:
-        """Prints the first five rows of a Dataframe inlcuding the header.
+        """Returns the first five rows of a Dataframe in readable format.
 
         Example:
-            >>> import bonsai
             >>> df = bonsai.DataFrame({"col1": [1, 2, 3, 4, 5], "col2": [True, False, True, True, True]})
             ┌───────────┬────────────┐
             │    col1   │    col2    │
