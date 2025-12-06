@@ -4,7 +4,6 @@
 
 PyObject* DataFrameSelect(DataFrameObject* self, PyObject* args) {
   PyObject* input_arg;
-
   if (!PyArg_ParseTuple(args, "O", &input_arg)) {
     return NULL;
   }
@@ -24,7 +23,27 @@ PyObject* DataFrameSelect(DataFrameObject* self, PyObject* args) {
   }
 
   else if (PyList_Check(input_arg)) {
-    // WIP
+    for (int j = 0; j < PyList_GET_SIZE(input_arg); j++) {
+      PyObject* wanted_name = PyList_GetItem(input_arg, j);
+
+      int found = 0;
+
+      for (int i = 0; i < self->num_columns; i++) {
+        ColumnObject* col = (ColumnObject*)PyList_GetItem(self->columns, i);
+
+        int compare = PyObject_RichCompareBool(col->name, wanted_name, Py_EQ);
+
+        if (compare == 1) {
+          PyList_Append(new_col_list, (PyObject*)col);
+          found = 1;
+          break;
+        }
+      }
+
+      if (!found) {
+        /* WIP */
+      }
+    }
   }
 
   PyObject* result_df =
