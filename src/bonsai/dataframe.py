@@ -30,6 +30,7 @@ class DataFrame(_DataFrame):
         max_col_widths = []
         for col_idx in range(self.num_columns):
             col_name = self.columns[col_idx].name
+            print(col_idx)
             dtype_name = str(self.get_dtype(col_idx))
             current_max = max(len(col_name), len(dtype_name))
 

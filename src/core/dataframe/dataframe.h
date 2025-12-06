@@ -2,6 +2,7 @@
 #define DATAFRAME_H
 #include <Python.h>
 
+extern PyTypeObject DataFrameType;
 typedef struct {
   PyObject_HEAD PyObject* columns;
   Py_ssize_t num_columns;
@@ -15,5 +16,8 @@ PyObject* DataFrameGetItem(DataFrameObject* self, PyObject* args,
                            PyObject* kwds);
 PyObject* DataFrameGetDtype(DataFrameObject* self, PyObject* args,
                             PyObject* kwds);
+PyObject* DataFrameSelect(DataFrameObject* self, PyObject* args);
+PyObject* DataFrame_CreateFromColumnList(PyObject* column_list,
+                                         PyTypeObject* type);
 
 #endif
