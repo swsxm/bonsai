@@ -19,5 +19,6 @@ PyObject* DataFrameGetDtype(DataFrameObject* self, PyObject* args,
 PyObject* DataFrameSelect(DataFrameObject* self, PyObject* args);
 PyObject* DataFrame_CreateFromColumnList(PyObject* column_list,
                                          PyTypeObject* type);
+ColumnObject* DataFrame_FindCol(DataFrameObject* self, PyObject* col_name);
 
 #endif
