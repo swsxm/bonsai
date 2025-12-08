@@ -9,6 +9,7 @@ static PyMethodDef DataFrame_methods[] = {
     {"get_dtype", (PyCFunction)DataFrameGetDtype, METH_VARARGS,
      "Get the column item at index i."},
     {"select", (PyCFunction)DataFrameSelect, METH_VARARGS, "Select columns."},
+    {"add", (PyCFunction)DataFrameAdd, METH_VARARGS, "Add two columns."},
     {NULL, NULL, 0, NULL}};
 
 PyTypeObject ColumnType = {

@@ -20,5 +20,6 @@ PyObject* DataFrameSelect(DataFrameObject* self, PyObject* args);
 PyObject* DataFrame_CreateFromColumnList(PyObject* column_list,
                                          PyTypeObject* type);
 ColumnObject* DataFrame_FindCol(DataFrameObject* self, PyObject* col_name);
+PyObject* DataFrameAdd(PyObject* self, PyObject* args);
 
 #endif

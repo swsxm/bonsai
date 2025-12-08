@@ -2,7 +2,7 @@
 
 #include "../../core.h"
 
-PyObject* DataFrame__add__(PyObject* self, PyObject* args) {
+PyObject* DataFrameAdd(PyObject* self, PyObject* args) {
   PyObject* left_col_name;
   PyObject* right_col_name;
   PyObject* new_col_name;
@@ -14,23 +14,18 @@ PyObject* DataFrame__add__(PyObject* self, PyObject* args) {
 
   DataFrameObject* df = (DataFrameObject*)self;
 
-  ColumnObject* left_col = DataFrame_FindCol(self, left_col_name);
-  ColumnObject* right_col = DataFrame_FindCol(self, right_col_name);
+  ColumnObject* left_col = DataFrame_FindCol(df, left_col_name);
+  ColumnObject* right_col = DataFrame_FindCol(df, right_col_name);
 
   if ((left_col == NULL) || (right_col == NULL)) {
-    PyErr_SetString(PyExc_KeyError,
-                    "One or both columns not found in DataFrame");
+    PyErr_SetString(PyExc_KeyError, "One or both columns not found");
     return NULL;
   }
 
   if (left_col->dtype != right_col->dtype) {
-    PyErr_SetString(PyExc_TypeError,
-                    "Columns must be of the same dtype to add");
     return NULL;
   }
-
   if (left_col->size != right_col->size) {
-    PyErr_SetString(PyExc_ValueError, "Columns must be the same length");
     return NULL;
   }
 
@@ -39,33 +34,47 @@ PyObject* DataFrame__add__(PyObject* self, PyObject* args) {
 
   switch (left_col->dtype) {
     case DTYPE_INT: {
-      int* result_array = PyMem_New(int, count);
+      long long* result_array = PyMem_New(long long, count);
+      if (!result_array) return PyErr_NoMemory();
 
-      if (result_array == NULL) {
-        return NULL;
-      }
-
-      int* left_data = (int*)left_col->data;
-      int* right_data = (int*)right_col->data;
+      long long* left_data = (long long*)left_col->data;
+      long long* right_data = (long long*)right_col->data;
 
       for (size_t i = 0; i < count; i++) {
         result_array[i] = left_data[i] + right_data[i];
       }
-
       new_data = result_array;
       break;
     }
     default:
-      PyErr_SetString(PyExc_NotImplementedError,
-                      "This dtype is not supported for addition");
+      PyErr_SetString(PyExc_NotImplementedError, "Dtype not supported");
       return NULL;
   }
 
-  if (DataFrame_InsertColumn(df, new_col_name, new_data, left_col->dtype,
-                             count) < 0) {
-    free(new_data);
+  ColumnObject* new_col = PyObject_New(ColumnObject, &ColumnType);
+  if (!new_col) {
+    PyMem_Free(new_data);
     return NULL;
   }
 
-  Py_RETURN_NONE;
+  Py_INCREF(new_col_name);
+  new_col->name = new_col_name;
+  new_col->dtype = left_col->dtype;
+  new_col->size = count;
+  new_col->data = new_data;
+
+  if (PyList_Append(df->columns, (PyObject*)new_col) < 0) {
+    Py_DECREF(new_col_name);
+    PyMem_Free(new_data);
+    Py_DECREF(new_col);
+    return NULL;
+  }
+
+  Py_DECREF(new_col);
+
+  df->num_columns++;
+
+  Py_INCREF(self);
+
+  return (PyObject*)self;
 }

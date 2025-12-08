@@ -1,6 +1,7 @@
 #ifndef COLUMN_H
 #define COLUMN_H
-#include "core.h"
+
+#include <Python.h>
 
 #define ALL_TYPES(X)                                                      \
   X(DTYPE_FLOAT, double, PyFloat_AsDouble, PyFloat_FromDouble, "%.6g")    \

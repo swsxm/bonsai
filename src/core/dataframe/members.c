@@ -1,7 +1,7 @@
 #include <Python.h>
 #include <structmember.h>
 
-#include "dataframe.h"
+#include "../core.h"
 
 PyMemberDef DataFrame_members[] = {
     {"columns", T_OBJECT_EX, offsetof(DataFrameObject, columns), READONLY,

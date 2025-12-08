@@ -1,6 +1,6 @@
 #include <structmember.h>
 
-#include "column.h"
+#include "../core.h"
 
 PyMemberDef Column_members[] = {
     {"name", T_OBJECT_EX, offsetof(ColumnObject, name), READONLY,

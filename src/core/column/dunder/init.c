@@ -1,7 +1,7 @@
 #include <Python.h>
 #include <string.h>
 
-#include "core.h"
+#include "../../core.h"
 
 #define GEN_INIT_CASE(NAME, C_TYPE, PY_TO_C, C_TO_PY, FMT)              \
   case NAME: {                                                          \

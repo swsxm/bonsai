@@ -1,6 +1,6 @@
 #include <Python.h>
 
-#include "core.h"
+#include "../column.h"
 
 void Column__dealloc__(ColumnObject* self) {
   if (self->data != NULL) {
