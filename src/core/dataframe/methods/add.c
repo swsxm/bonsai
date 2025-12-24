@@ -3,9 +3,7 @@
 #include "../../core.h"
 
 PyObject* DataFrameAdd(PyObject* self, PyObject* args) {
-  PyObject* left_col_name;
-  PyObject* right_col_name;
-  PyObject* new_col_name;
+  PyObject *left_col_name, *right_col_name, *new_col_name;
 
   if (!PyArg_ParseTuple(args, "OOO", &left_col_name, &right_col_name,
                         &new_col_name)) {
@@ -13,19 +11,18 @@ PyObject* DataFrameAdd(PyObject* self, PyObject* args) {
   }
 
   DataFrameObject* df = (DataFrameObject*)self;
-
   ColumnObject* left_col = DataFrame_FindCol(df, left_col_name);
   ColumnObject* right_col = DataFrame_FindCol(df, right_col_name);
 
-  if ((left_col == NULL) || (right_col == NULL)) {
+  if (!left_col || !right_col) {
     PyErr_SetString(PyExc_KeyError, "One or both columns not found");
     return NULL;
   }
 
-  if (left_col->dtype != right_col->dtype) {
-    return NULL;
-  }
-  if (left_col->size != right_col->size) {
+  if (left_col->dtype != right_col->dtype ||
+      left_col->size != right_col->size) {
+    PyErr_SetString(PyExc_ValueError,
+                    "Columns must have the same dtype and size");
     return NULL;
   }
 
@@ -34,16 +31,29 @@ PyObject* DataFrameAdd(PyObject* self, PyObject* args) {
 
   switch (left_col->dtype) {
     case DTYPE_INT: {
-      long long* result_array = PyMem_New(long long, count);
-      if (!result_array) return PyErr_NoMemory();
+      long long* res = PyMem_New(long long, count);
+      if (!res) return PyErr_NoMemory();
 
-      long long* left_data = (long long*)left_col->data;
-      long long* right_data = (long long*)right_col->data;
+      long long* l = (long long*)left_col->data;
+      long long* r = (long long*)right_col->data;
 
       for (size_t i = 0; i < count; i++) {
-        result_array[i] = left_data[i] + right_data[i];
+        res[i] = l[i] + r[i];
       }
-      new_data = result_array;
+      new_data = res;
+      break;
+    }
+    case DTYPE_FLOAT: {
+      double* res = PyMem_New(double, count);
+      if (!res) return PyErr_NoMemory();
+
+      double* l = (double*)left_col->data;
+      double* r = (double*)right_col->data;
+
+      for (size_t i = 0; i < count; i++) {
+        res[i] = l[i] + r[i];
+      }
+      new_data = res;
       break;
     }
     default:
@@ -71,10 +81,8 @@ PyObject* DataFrameAdd(PyObject* self, PyObject* args) {
   }
 
   Py_DECREF(new_col);
-
   df->num_columns++;
 
   Py_INCREF(self);
-
   return (PyObject*)self;
 }
