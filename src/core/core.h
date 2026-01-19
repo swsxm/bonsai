@@ -5,4 +5,6 @@
 #include "dataframe/dataframe.h"
 #include "dtype/dispatcher.h"
 
+extern PyTypeObject DataFrameType;
+
 #endif CORE_H

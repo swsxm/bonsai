@@ -1,7 +1,7 @@
 #ifndef DISPATCHER_H
 #define DISPATCHER_H
 
-typedef struct {
+typedef struct Dispatcher {
   char** name;
 } Dispatcher;
 
