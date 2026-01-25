@@ -4,9 +4,11 @@
 #include "../core.h"
 
 typedef struct {
-  Column* columns;
-  int row_len;
-  int col_len;
+  Column** columns;
+  Py_ssize_t row_count;
+  Py_ssize_t col_count;
 } DataFrame;
+
+PyObject* DataFrame__init__(DataFrame*, PyObject*);
 
 #endif
