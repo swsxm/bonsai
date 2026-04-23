@@ -10,7 +10,6 @@ static struct PyModuleDef bonsaimodule = {
 
 PyMODINIT_FUNC PyInit__core(void) {
   PyObject* m;
-  printf("DEBUG: tp_name is %s\n", DataFrameType.tp_name);
 
   if (PyType_Ready(&DataFrameType) < 0) return NULL;
 
