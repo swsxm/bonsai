@@ -27,7 +27,7 @@ int DataFrame_init(DataFrame *self, PyObject *args, PyObject *kwds) {
         if (!PyUnicode_Check(key)) {
             PyErr_SetString(PyExc_TypeError, "The keys of the dictionary has to be of type string.");
         }
-        Column__init(self->columns[i], input_df_dict);
+        Column__init__(self->columns[i], input_df_dict);
         i++;
     }
     

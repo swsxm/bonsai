@@ -11,11 +11,9 @@ typedef enum {
 } ColType;
 
 typedef struct {
-  ColType type;
   char* name;
   void* data;
   size_t len;
-  size_t element_size;
   Dispatcher vtable;
 } Column;
 
