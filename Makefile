@@ -1,10 +1,13 @@
+SHELL=cmd.exe
+
 all: fresh
 
 fresh:
 	@echo "1. Removing old build artifacts..."
-	rm -rf build/
-	rm -rf src/bonsai/*.so
-	rm -rf src/*.egg-info
+	-rmdir /s /q build 2>nul
+	-del /s /q src\bonsai\*.pyd 2>nul
+	-del /s /q src\bonsai\*.so 2>nul
+	-for /d %%i in (src\*.egg-info) do rmdir /s /q "%%i" 2>nul
 
 	@echo "2. Syncing environment..."
 	uv sync

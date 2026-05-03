@@ -3,11 +3,11 @@
 
 #include <Python.h>
 
+#include "dtype/generic.h"
+#include "dtype/dispatcher.h"
 #include "column/column.h"
 #include "dataframe/dataframe.h"
-#include "dtype/dispatcher.h"
 
 extern PyTypeObject DataFrameType;
-extern PyTypeObject ColumnType;
 
-#endif CORE_H
+#endif

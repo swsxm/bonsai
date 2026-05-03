@@ -1,0 +1,71 @@
+#include <Python.h>
+#include "../dataframe.h"
+#include "../../column/column.h"
+
+PyObject* get_dtype(PyObject* df, PyObject* args, PyObject* kwds) {
+    DataFrame* self = (DataFrame*) df;
+    
+    Py_ssize_t col_index; 
+    
+    static char *kwlist[] = {"index", NULL};
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwds, "n", kwlist, &col_index)) {
+        return NULL; 
+    }
+
+    if (col_index < 0 || col_index >= self->col_count) {
+        PyErr_SetString(PyExc_IndexError, "Column index out of range.");
+        return NULL; 
+    }
+
+    Column* col = self->columns[col_index];
+    const char* dtype = col->vtable->dtype_name; 
+    
+    return PyUnicode_FromString(dtype);
+}
+
+PyObject* get_value(PyObject* df, PyObject* args, PyObject* kwds) {
+    DataFrame* self = (DataFrame*) df;
+    
+    Py_ssize_t row_index;
+    Py_ssize_t col_index; 
+    
+    static char *kwlist[] = {"row_index", "col_index", NULL};
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwds, "nn", kwlist, &row_index, &col_index)) {
+        return NULL; 
+    }
+
+    if (col_index < 0 || col_index >= self->col_count) {
+        PyErr_SetString(PyExc_IndexError, "Column index out of range.");
+        return NULL; 
+    }
+
+    if (row_index < 0 || row_index >= self->row_count) {
+        PyErr_SetString(PyExc_IndexError, "Row index out of range.");
+        return NULL; 
+    }
+
+    Column* col = self->columns[col_index];
+    return col->vtable->get(col, row_index);
+}
+
+PyObject* get_name(PyObject* df, PyObject* args, PyObject* kwds) {
+    DataFrame* self = (DataFrame*) df;
+    
+    Py_ssize_t col_index; 
+    static char *kwlist[] = {"index", NULL};
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwds, "n", kwlist, &col_index)) {
+        return NULL; 
+    }
+
+    if (col_index < 0 || col_index >= self->col_count) {
+        PyErr_SetString(PyExc_IndexError, "Column index out of range.");
+        return NULL; 
+    }
+    Column* col = self->columns[col_index];
+    const char* name = col->name;
+    
+    return PyUnicode_FromString(name);
+}

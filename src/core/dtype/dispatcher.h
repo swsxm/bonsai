@@ -1,8 +1,13 @@
 #ifndef DISPATCHER_H
 #define DISPATCHER_H
 
+#include <Python.h>
+
 typedef struct Dispatcher {
-  char *name;
+  Py_ssize_t size;
+  void (*set)(void*, PyObject*);
+  PyObject* (*get)(PyObject*, Py_ssize_t);
+  char* dtype_name;
 } Dispatcher;
 
 extern const Dispatcher DISP_INT;

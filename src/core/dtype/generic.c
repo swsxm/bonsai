@@ -2,8 +2,9 @@
 #include <stdbool.h>
 #include <limits.h>
 #include <string.h>
+#include "../column/column.h"
 
-
+// SETTERS
 void *int_set(void *dest, PyObject *val) {
     int overflow;
     long result = PyLong_AsLongAndOverflow(val, &overflow);
@@ -53,4 +54,42 @@ void *string_set(void *dest, PyObject *val) {
     
     *(char **)dest = copy;
     return dest;
+}
+
+// GETTERS
+PyObject* *char_get(PyObject* self, Py_ssize_t row_index) {
+    Column* col = (Column*)self;
+    char value = ((char*)col->data)[row_index];
+    return PyUnicode_FromFormat("%c", value);
+}
+
+PyObject* *int_get(PyObject* self, Py_ssize_t row_index) {
+    Column* col = (Column*)self;
+    long long value = ((long long*)col->data)[row_index];
+    return PyLong_FromLongLong(value);
+}
+
+PyObject* *float_get(PyObject* self, Py_ssize_t row_index) {
+    Column* col = (Column*)self;
+    double value = ((double*)col->data)[row_index];
+    return PyFloat_FromDouble(value);
+}
+PyObject* *bool_get(PyObject* self, Py_ssize_t row_index) {
+    Column* col = (Column*)self;
+    char value = ((char*)col->data)[row_index];
+    if (value) {
+        Py_RETURN_TRUE;
+    } else {
+        Py_RETURN_FALSE;
+    }
+}
+
+PyObject* *string_get(PyObject* self, Py_ssize_t row_index) {
+    Column* col = (Column*)self;
+    char* value = ((char**)col->data)[row_index];
+    
+    if (value == NULL) {
+        Py_RETURN_NONE;
+    }
+    return PyUnicode_FromString(value);
 }

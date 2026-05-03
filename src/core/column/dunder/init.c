@@ -1,37 +1,59 @@
-#include "../../core.h"
+#include <Python.h>
+#include "../column.h"
+#include "../../dtype/generic.h"
 
-PyObject* Column__init__(Column* self, char* col_name, PyObject* values) {
+#include <Python.h>
+#include "../column.h"
+#include "../../dtype/generic.h"
 
-  // Optimistic strict policy
-  // We expect the column to contain the same dtype
-  PyObject* first_elem =  PyList_GetItem(values, 0);
+int Column_init(Column* self, PyObject* col_name, PyObject* values) {
 
-  // Order matters
-  if (PyBool_Check(first_elem)) {
-    self->vtable = DISP_BOOL;
-  }
-  else if (PyFloat_Check(first_elem)) {
-    self->vtable = DISP_FLOAT;
-  }
-  else if (PyLong_Check(first_elem)) {
-    self->vtable = DISP_INT;
-  }
-  else if (PyUnicode_Check(first_elem) && PyUnicode_GetLength(first_elem) == 1) {
-    self->vtable = DISP_CHAR;
-  }
-  else if (PyUnicode_Check(first_elem)) {
-    self->vtable = DISP_STRING;
-  }
-  else {
-    return PyErr_Format(PyExc_TypeError, "Dtype is not supported for col %s.", *col_name);
-  }
+    if (!PyList_Check(values)) {
+        PyErr_SetString(PyExc_TypeError, "Column data must be a list.");
+        return -1;
+    }
 
-  self->name = col_name;
-  self->len = PyList_Size(values);
-  self->data = malloc(self->vtable->size * self->len);
-  for (Py_ssize_t i = 0; i < self->len; i++) {
-    void* target_address = self->data + i * self->vtable->size;
-    self->vtable->set(target_address, PyList_GetItem(values, i));
-  }
+    Py_ssize_t list_size = PyList_Size(values);
+    if (list_size == 0) {
+        PyErr_SetString(PyExc_ValueError, "Cannot infer dtype from empty list.");
+        return -1;
+    }
 
+    PyObject* first_elem = PyList_GetItem(values, 0);
+    if (first_elem == NULL) return -1; 
+
+    if (PyBool_Check(first_elem)) {
+        self->vtable = &DISP_BOOL;
+    } else if (PyFloat_Check(first_elem)) {
+        self->vtable = &DISP_FLOAT;
+    } else if (PyLong_Check(first_elem)) {
+        self->vtable = &DISP_INT;
+    } else if (PyUnicode_Check(first_elem)) {
+        if (PyUnicode_GetLength(first_elem) == 1) {
+            self->vtable = &DISP_CHAR;
+        } else {
+            self->vtable = &DISP_STRING;
+        }
+    } else {
+        PyErr_Format(PyExc_TypeError, "Unsupported dtype in column.");
+        return -1;
+    }
+
+    self->name = strdup(PyUnicode_AsUTF8(col_name));
+    self->len = list_size;
+    
+    self->data = malloc(self->vtable->size * self->len);
+    if (self->data == NULL) {
+        PyErr_NoMemory();
+        return -1;
+    }
+
+    for (Py_ssize_t i = 0; i < self->len; i++) {
+        void* target_address = (char*)self->data + (i * self->vtable->size);
+        PyObject* item = PyList_GetItem(values, i);
+        
+        self->vtable->set(target_address, item);
+    }
+
+    return 0;
 }
