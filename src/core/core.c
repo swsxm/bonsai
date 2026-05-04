@@ -1,7 +1,6 @@
 #include <Python.h>
 #include <structmember.h>
 #include "core.h"
-#include "dataframe/dataframe.h"
 
 static PyMemberDef DataFrame_members[] = {
     {"col_count", T_PYSSIZET, offsetof(DataFrame, col_count), READONLY, "Number of columns"},
@@ -40,6 +39,7 @@ PyTypeObject DataFrameType = {
     .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
     .tp_new = PyType_GenericNew,
     .tp_init = (initproc)DataFrame_init,
+    .tp_dealloc =(destructor)DataFrame_dealloc,
     .tp_methods = DataFrame_methods,
     .tp_members = DataFrame_members,
 };

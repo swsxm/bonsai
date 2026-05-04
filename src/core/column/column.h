@@ -11,5 +11,6 @@ typedef struct {
 } Column;
 
 int Column_init(Column* self, PyObject* col_name, PyObject* values);
+void Column_dealloc(Column* col);
 
 #endif

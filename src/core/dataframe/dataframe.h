@@ -10,7 +10,8 @@ typedef struct {
   Py_ssize_t col_count;
 } DataFrame;
 
-int DataFrame_init(PyObject*, PyObject*, PyObject*);
+int DataFrame_init(PyObject* df, PyObject* args, PyObject* kwgs);
+void DataFrame_dealloc(PyObject* df);
 
 PyObject* get_dtype(PyObject* df, PyObject* args, PyObject* kwds);
 PyObject* get_value(PyObject* df, PyObject* args, PyObject* kwds);
