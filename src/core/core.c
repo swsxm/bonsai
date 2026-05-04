@@ -1,7 +1,7 @@
 #include <Python.h>
 #include <structmember.h>
 #include "core.h"
-#include "dataframe/methods/getter.h"
+#include "dataframe/dataframe.h"
 
 static PyMemberDef DataFrame_members[] = {
     {"col_count", T_PYSSIZET, offsetof(DataFrame, col_count), READONLY, "Number of columns"},

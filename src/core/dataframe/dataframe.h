@@ -12,4 +12,8 @@ typedef struct {
 
 int DataFrame_init(PyObject*, PyObject*, PyObject*);
 
+PyObject* get_dtype(PyObject* df, PyObject* args, PyObject* kwds);
+PyObject* get_value(PyObject* df, PyObject* args, PyObject* kwds);
+PyObject* get_name(PyObject* df, PyObject* args, PyObject* kwds);
+
 #endif

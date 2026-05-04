@@ -18,10 +18,12 @@ void *int_set(void *dest, PyObject *val) {
 }
 
 void *char_set(void *dest, PyObject *val) {
-    int overflow;
-    long result = PyLong_AsLongAndOverflow(val, &overflow);
-    if (result == -1 && PyErr_Occurred()) return NULL;
-    if (overflow != 0 || result > SCHAR_MAX || result < SCHAR_MIN) {
+    long result;
+    int overflow = 0;
+
+    result = PyUnicode_ReadChar(val, 0);
+
+    if (result > SCHAR_MAX || result < SCHAR_MIN) {
         PyErr_SetString(PyExc_OverflowError, "Value out of range for C char");
         return NULL;
     }
@@ -36,14 +38,12 @@ void *float_set(void *dest, PyObject *val) {
     return dest;
 }
 
-
 void *bool_set(void *dest, PyObject *val) {
     int truth = PyObject_IsTrue(val);
     if (truth == -1) return NULL;
     *(bool *)dest = (truth != 0);
     return dest;
 }
-
 
 void *string_set(void *dest, PyObject *val) {
     const char *str = PyUnicode_AsUTF8(val);
@@ -57,26 +57,27 @@ void *string_set(void *dest, PyObject *val) {
 }
 
 // GETTERS
-PyObject* *char_get(PyObject* self, Py_ssize_t row_index) {
-    Column* col = (Column*)self;
-    char value = ((char*)col->data)[row_index];
+PyObject *char_get(PyObject *self, Py_ssize_t row_index) {
+    Column *col = (Column *)self;
+    signed char value = ((signed char *)col->data)[row_index];
     return PyUnicode_FromFormat("%c", value);
 }
 
-PyObject* *int_get(PyObject* self, Py_ssize_t row_index) {
-    Column* col = (Column*)self;
-    long long value = ((long long*)col->data)[row_index];
-    return PyLong_FromLongLong(value);
+PyObject *int_get(PyObject *self, Py_ssize_t row_index) {
+    Column *col = (Column *)self;
+    int value = ((int *)col->data)[row_index];
+    return PyLong_FromLong((long)value);
 }
 
-PyObject* *float_get(PyObject* self, Py_ssize_t row_index) {
-    Column* col = (Column*)self;
-    double value = ((double*)col->data)[row_index];
-    return PyFloat_FromDouble(value);
+PyObject *float_get(PyObject *self, Py_ssize_t row_index) {
+    Column *col = (Column *)self;
+    float value = ((float *)col->data)[row_index];
+    return PyFloat_FromDouble((double)value);
 }
-PyObject* *bool_get(PyObject* self, Py_ssize_t row_index) {
-    Column* col = (Column*)self;
-    char value = ((char*)col->data)[row_index];
+
+PyObject *bool_get(PyObject *self, Py_ssize_t row_index) {
+    Column *col = (Column *)self;
+    bool value = ((bool *)col->data)[row_index];
     if (value) {
         Py_RETURN_TRUE;
     } else {
@@ -84,9 +85,9 @@ PyObject* *bool_get(PyObject* self, Py_ssize_t row_index) {
     }
 }
 
-PyObject* *string_get(PyObject* self, Py_ssize_t row_index) {
-    Column* col = (Column*)self;
-    char* value = ((char**)col->data)[row_index];
+PyObject *string_get(PyObject *self, Py_ssize_t row_index) {
+    Column *col = (Column *)self;
+    char *value = ((char **)col->data)[row_index];
     
     if (value == NULL) {
         Py_RETURN_NONE;

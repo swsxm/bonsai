@@ -1,5 +1,5 @@
-#ifndef GENERIC_H 
-#define GENERIC_H 
+#ifndef DTYPE_H 
+#define DTYPE_H 
 
 #include <Python.h>
 
@@ -14,5 +14,18 @@ PyObject* bool_get(PyObject*, Py_ssize_t);
 PyObject* string_get(PyObject*, Py_ssize_t);
 PyObject* char_get(PyObject*, Py_ssize_t);
 PyObject* float_get(PyObject*, Py_ssize_t);
+
+typedef struct Dispatcher {
+  Py_ssize_t size;
+  void (*set)(void*, PyObject*);
+  PyObject* (*get)(PyObject*, Py_ssize_t);
+  char* dtype_name;
+} Dispatcher;
+
+extern const Dispatcher DISP_INT;
+extern const Dispatcher DISP_BOOL;
+extern const Dispatcher DISP_STRING;
+extern const Dispatcher DISP_CHAR;
+extern const Dispatcher DISP_FLOAT;
 
 #endif

@@ -1,7 +1,6 @@
 #include <stdbool.h>
 #include <stdint.h>
-#include "dispatcher.h"
-#include "generic.h"
+#include "dtype.h"
 
 const Dispatcher DISP_INT = {
     .size = sizeof(int64_t),

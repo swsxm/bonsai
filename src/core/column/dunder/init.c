@@ -1,10 +1,7 @@
 #include <Python.h>
 #include "../column.h"
-#include "../../dtype/generic.h"
+#include "../../dtype/dtype.h"
 
-#include <Python.h>
-#include "../column.h"
-#include "../../dtype/generic.h"
 
 int Column_init(Column* self, PyObject* col_name, PyObject* values) {
 

@@ -1,7 +1,7 @@
 #ifndef COLUMN_H
 #define COLUMN_H
 
-#include "../dtype/dispatcher.h"
+#include "../dtype/dtype.h"
 
 typedef struct {
   char* name;
@@ -10,6 +10,6 @@ typedef struct {
   Dispatcher* vtable;
 } Column;
 
-int Column_init(Column*, PyObject*, PyObject*);
+int Column_init(Column* self, PyObject* col_name, PyObject* values);
 
 #endif

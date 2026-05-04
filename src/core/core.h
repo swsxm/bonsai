@@ -3,8 +3,7 @@
 
 #include <Python.h>
 
-#include "dtype/generic.h"
-#include "dtype/dispatcher.h"
+#include "dtype/dtype.h"
 #include "column/column.h"
 #include "dataframe/dataframe.h"
 
