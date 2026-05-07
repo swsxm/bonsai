@@ -69,3 +69,8 @@ PyObject* get_name(PyObject* df, PyObject* args, PyObject* kwds) {
     
     return PyUnicode_FromString(name);
 }
+
+PyObject* get_shape(PyObject* df) {
+    DataFrame* self = (DataFrame*) df;
+    return Py_BuildValue("(ii)", self->col_count, self->row_count);
+}

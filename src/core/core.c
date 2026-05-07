@@ -27,6 +27,12 @@ static PyMethodDef DataFrame_methods[] = {
         METH_VARARGS | METH_KEYWORDS, 
         "Get column name by index."
     },
+    {
+        "get_shape", 
+        (PyCFunction)get_shape, 
+        METH_NOARGS, 
+        "Get shape."
+    },
     {NULL, NULL, 0, NULL} 
 };
 

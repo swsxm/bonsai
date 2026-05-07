@@ -16,5 +16,6 @@ void DataFrame_dealloc(PyObject* df);
 PyObject* get_dtype(PyObject* df, PyObject* args, PyObject* kwds);
 PyObject* get_value(PyObject* df, PyObject* args, PyObject* kwds);
 PyObject* get_name(PyObject* df, PyObject* args, PyObject* kwds);
+PyObject* get_shape(PyObject* df, PyObject* args);
 
 #endif

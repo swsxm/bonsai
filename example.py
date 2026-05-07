@@ -18,7 +18,6 @@ string_col = [
 try:
     print("Initializing Bonsai DataFrame...")
     df = bs.DataFrame({
-        # "test": ["a"]
         "bool_test": bool_col,
         "char_test": char_col,
         "int_test": int_col,
@@ -26,6 +25,7 @@ try:
         "string_test": string_col
     })
     print(df)
+    print(df.get_shape())
     
     
 except Exception as e:
