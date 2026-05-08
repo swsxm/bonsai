@@ -26,6 +26,8 @@ try:
     })
     print(df)
     print(df.get_shape())
+    print(df.head(10))
+    print(df.tail(3))
     
     
 except Exception as e:
