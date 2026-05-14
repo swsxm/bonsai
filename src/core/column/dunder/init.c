@@ -20,16 +20,16 @@ int Column_init(Column* self, PyObject* col_name, PyObject* values) {
     if (first_elem == NULL) return -1; 
 
     if (PyBool_Check(first_elem)) {
-        self->vtable = &DISP_BOOL;
+        self->dtype = DTYPE_BOOL;
     } else if (PyFloat_Check(first_elem)) {
-        self->vtable = &DISP_FLOAT;
+        self->dtype = DTYPE_FLOAT;
     } else if (PyLong_Check(first_elem)) {
-        self->vtable = &DISP_INT;
+        self->dtype = DTYPE_INT;
     } else if (PyUnicode_Check(first_elem)) {
         if (PyUnicode_GetLength(first_elem) == 1) {
-            self->vtable = &DISP_CHAR;
+            self->dtype = DTYPE_CHAR;
         } else {
-            self->vtable = &DISP_STRING;
+            self->dtype = DTYPE_STRING;
         }
     } else {
         PyErr_Format(PyExc_TypeError, "Unsupported dtype in column.");
@@ -38,18 +38,19 @@ int Column_init(Column* self, PyObject* col_name, PyObject* values) {
 
     self->name = strdup(PyUnicode_AsUTF8(col_name));
     self->len = list_size;
+    const Dispatcher* disp = dispatcher_registry[self->dtype];
     
-    self->data = malloc(self->vtable->size * self->len);
+    self->data = malloc(disp->size * self->len);
     if (self->data == NULL) {
         PyErr_NoMemory();
         return -1;
     }
 
     for (Py_ssize_t i = 0; i < self->len; i++) {
-        void* target_address = (char*)self->data + (i * self->vtable->size);
+        void* target_address = (char*)self->data + (i * disp->size);
         PyObject* item = PyList_GetItem(values, i);
         
-        self->vtable->set(target_address, item);
+        disp->set(target_address, item);
     }
 
     return 0;

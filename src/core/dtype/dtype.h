@@ -15,6 +15,15 @@ PyObject* string_get(PyObject*, Py_ssize_t);
 PyObject* char_get(PyObject*, Py_ssize_t);
 PyObject* float_get(PyObject*, Py_ssize_t);
 
+typedef enum {
+    DTYPE_BOOL,  
+    DTYPE_FLOAT, 
+    DTYPE_INT,
+    DTYPE_CHAR,
+    DTYPE_STRING,
+    DTYPE_COUNT
+} DTYPE;
+
 typedef struct Dispatcher {
   Py_ssize_t size;
   void (*set)(void*, PyObject*);
@@ -27,5 +36,8 @@ extern const Dispatcher DISP_BOOL;
 extern const Dispatcher DISP_STRING;
 extern const Dispatcher DISP_CHAR;
 extern const Dispatcher DISP_FLOAT;
+
+extern const char* const dtype_names[DTYPE_COUNT]; 
+extern const Dispatcher* const dispatcher_registry[DTYPE_COUNT];
 
 #endif

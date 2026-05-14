@@ -10,7 +10,7 @@ void Column_dealloc(Column* col) {
     }
     
     if (col->data != NULL) {
-        if (col->vtable == &DISP_STRING) {
+        if (col->dtype == DTYPE_STRING) {
             for (size_t i = 0; i < col->len; i++) {
                 char* str = ((char**)col->data)[i];
                 if (str != NULL) {

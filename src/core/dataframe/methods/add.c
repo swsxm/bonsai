@@ -34,10 +34,10 @@ PyObject* add(PyObject* df, PyObject* args, PyObject* kwds) {
     Column* col2 = self->columns[idx2];
     Column* out_col = self->columns[idx_out];
 
-    if (strcmp(col1->vtable->dtype_name, col2->vtable->dtype_name) != 0) {
+    if (col1->dtype != col2->dtype) {
         PyErr_Format(PyExc_TypeError, 
             "Dtype mismatch: Cannot add '%s' to '%s'.", 
-            col1->vtable->dtype_name);
+            col1->dtype);
         return NULL;
     }
 

@@ -19,9 +19,8 @@ PyObject* get_dtype(PyObject* df, PyObject* args, PyObject* kwds) {
     }
 
     Column* col = self->columns[col_index];
-    const char* dtype = col->vtable->dtype_name; 
     
-    return PyUnicode_FromString(dtype);
+    return PyUnicode_FromString(dtype_names[col->dtype]);
 }
 
 PyObject* get_value(PyObject* df, PyObject* args, PyObject* kwds) {
@@ -47,7 +46,7 @@ PyObject* get_value(PyObject* df, PyObject* args, PyObject* kwds) {
     }
 
     Column* col = self->columns[col_index];
-    return col->vtable->get(col, row_index);
+    return dispatcher_registry[col->dtype]->get(col, row_index);
 }
 
 PyObject* get_name(PyObject* df, PyObject* args, PyObject* kwds) {
